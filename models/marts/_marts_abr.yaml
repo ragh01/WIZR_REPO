@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_stations_abr
+  - name: station_abr_int
     description: >
       *** SIMULATED ABR enrichment *** — brand-level match against a
       hand-authored reference (seed_brand_abr), not a live API call.
