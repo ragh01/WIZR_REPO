@@ -1,0 +1,1 @@
+select * from {{ source('bronze', 'nsw_prices_raw') }}

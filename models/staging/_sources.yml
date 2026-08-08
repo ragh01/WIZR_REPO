@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: fuel_analytics
+    schema: bronze
+    description: >
+      Raw, append-only landing tables. Source-faithful, never cleaned here.
+      Row-level provenance via source_file/batch_id; freshness via loaded_at.
+    tables:
+
+      - name: raw_wa_fuel_prices
+        description: WA FuelWatch historic daily prices (monthly CSV).
+        columns:
+          - name: publish_date
+            description: Date the standard price applied (WA 24-hour rule). String dd/MM/yyyy.
+          - name: trading_name
+            description: Station trading name. Part of the constructed station natural key.
+          - name: record_hash
+            description: MD5 over business fields; drives idempotent dedup in staging.
+
+      - name: nsw_prices_raw
+        description: NSW FuelCheck current prices (intraday feed, from /fuel/prices).
+        columns:
+          - name: stationcode
+            description: Natural key joining to nsw_stations_raw.code.
+          - name: lastupdated
+            description: Intraday timestamp, string dd/MM/yyyy HH24:MI:SS.
+
+      - name: nsw_stations_raw
+        description: NSW FuelCheck reference data — stations (from /fuel/lovs).
+        columns:
+          - name: code
+            description: Station natural key (real ID, unlike WA's constructed key).

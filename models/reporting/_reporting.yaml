@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: rpt_daily_price_summary
+    description: Average / lowest / highest price by day, fuel type, and brand.
+  - name: rpt_price_movement
+    description: Day-over-day movement in average price per fuel type.
+  - name: rpt_station_coverage
+    description: Station count and fuel-type coverage per brand.
+  - name: rpt_cheapest_station_by_fueltype
+    description: >
+      Concrete analytical output: on the most recent date loaded, the single
+      cheapest station for each fuel type. This is the direct answer to
+      "where's the cheapest fuel" that the task asks the model to support.

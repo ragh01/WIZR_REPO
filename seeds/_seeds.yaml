@@ -1,0 +1,28 @@
+version: 2
+
+seeds:
+  - name: seed_fuel_type
+    description: >
+      NSW fuel-type code -> readable name + category. Cross-check codes
+      against lovs_raw.json (fueltypes.items) from the reference-data call
+      and add any codes present there but missing here — an unmapped code
+      would otherwise be silently dropped from the fact (see dbt test).
+    columns:
+      - name: fueltype_code
+        tests: [unique, not_null]
+      - name: product_category
+
+  - name: seed_brand_abr
+    description: >
+      *** SIMULATED DATA — NOT A LIVE ABR LOOKUP ***
+      Hand-authored to demonstrate ABR enrichment design (matching approach,
+      confidence tiers, join logic) because no ABR Lookup GUID was available
+      in the timebox. ABNs/entity names are NOT verified against
+      https://abr.business.gov.au/json/. is_verified_via_live_abr_api = FALSE
+      on every row by design.
+    columns:
+      - name: brand
+        tests: [unique, not_null]
+      - name: match_confidence
+      - name: is_verified_via_live_abr_api
+        tests: [not_null]

@@ -1,0 +1,32 @@
+version: 2
+
+models:
+
+  - name: dim_date
+    columns:
+      - name: date_key
+
+  - name: dim_fuel_type
+    description: NSW fuel-type dimension, sourced from the governed seed lookup.
+    columns:
+      - name: fueltype_key
+      - name: fueltype_code
+        tests: [not_null]
+
+  - name: fct_fuel_price
+    description: NSW fuel price fact at station x fuel-type x day grain.
+    
+    columns:
+      - name: price_key
+      - name: date_key
+        tests:
+          - not_null
+      - name: station_key
+        tests:
+          - not_null
+      - name: fueltype_key
+        tests:
+          - not_null
+      - name: price_per_litre_aud
+        tests:
+          - not_null
