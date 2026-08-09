@@ -9,7 +9,9 @@ seeds:
       would otherwise be silently dropped from the fact (see dbt test).
     columns:
       - name: fueltype_code
-        tests: [unique, not_null]
+        tests:
+          - not_null
+          - unique
       - name: product_category
 
   - name: seed_brand_abr
@@ -22,7 +24,10 @@ seeds:
       on every row by design.
     columns:
       - name: brand
-        tests: [unique, not_null]
+        tests:
+          - not_null
+          - unique
       - name: match_confidence
       - name: is_verified_via_live_abr_api
-        tests: [not_null]
+        tests: 
+          - not_null

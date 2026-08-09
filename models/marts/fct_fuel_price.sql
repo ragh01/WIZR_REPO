@@ -1,15 +1,22 @@
-/*
-  FACT — grain: one row per station x fuel type x day.
-  Pure NSW star: no source_system column needed (single source),
-  no product-mapping join needed (fueltype_code IS the natural key
-  into dim_fuel_type — no name reconciliation across sources required).
-*/
+{{ config(
+    materialized='incremental',
+    unique_key='price_key'
+) }}
+
+-- Grain: one row per station, fuel type and day.
 select
-    {{ generate_surrogate_key(['station_code','fueltype_code','price_date']) }} as price_key,
+    {{ generate_surrogate_key(['station_code','fuel_type','price_date']) }} as price_key,
     to_number(to_char(price_date, 'YYYYMMDD'))                as date_key,
+    station_code,
     {{ generate_surrogate_key(['station_code']) }}  as station_key,
-    {{ generate_surrogate_key(['fueltype_code']) }} as fueltype_key,
+    {{ generate_surrogate_key(['fuel_type']) }} as fueltype_key,
     price_date,
-    price_cents,
     price_per_litre_aud
 from {{ ref('nsw_fuel_data_int') }}
+
+
+{% if is_incremental() %}
+
+where price_date >= dateadd(day, -2, current_date())
+
+{% endif %}

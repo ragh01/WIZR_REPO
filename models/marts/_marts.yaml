@@ -2,6 +2,23 @@ version: 2
 
 models:
 
+  - name: dim_station
+    description: >
+      NSW station dimension, keyed on the source's real station code,
+      enriched with SIMULATED ABR business context (brand-level match,
+      not a live lookup — see abr_is_verified_via_live_api).
+    columns:
+      - name: station_key
+        tests:
+          - not_null
+          - unique
+      - name: station_code
+        tests:
+          - not_null
+      - name: abr_match_confidence
+        tests:
+          - not_null
+
   - name: dim_date
     columns:
       - name: date_key
@@ -11,22 +28,41 @@ models:
     columns:
       - name: fueltype_key
       - name: fueltype_code
-        tests: [not_null]
+        tests:
+          - not_null
 
   - name: fct_fuel_price
     description: NSW fuel price fact at station x fuel-type x day grain.
     
     columns:
       - name: price_key
-      - name: date_key
-        tests:
-          - not_null
       - name: station_key
+        description: Foreign key to dim_station.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_station')
+                field: station_key
+
       - name: fueltype_key
+        description: Foreign key to dim_fuel_type.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fuel_type')
+                field: fueltype_key
+
+      - name: date_key
+        description: Foreign key to dim_date.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+            
       - name: price_per_litre_aud
         tests:
           - not_null

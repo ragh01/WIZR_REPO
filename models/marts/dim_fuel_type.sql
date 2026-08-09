@@ -1,8 +1,10 @@
-/*
-  Fuel type dimension, sourced from the seed (governed code -> name mapping)
-  rather than derived ad hoc from the fact — so the same code always resolves
-  to the same name/category everywhere it's used.
-*/
+{{ 
+    config(
+        materialized='table'
+) }}
+
+-- Governed fuel type mapping from seed reference data.
+
 select
     {{ generate_surrogate_key(['fueltype_code']) }} as fueltype_key,
     fueltype_code,

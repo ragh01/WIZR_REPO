@@ -1,3 +1,10 @@
+{{ 
+    config(
+        materialized='table'
+) }}
+
+-- Date dimension for reporting and time-based analysis.
+
 with dates as (
     select distinct price_date from {{ ref('nsw_fuel_data_int') }}
 )

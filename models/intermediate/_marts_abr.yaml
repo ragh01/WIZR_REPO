@@ -9,21 +9,8 @@ models:
       in the model SQL and the README.
     columns:
       - name: station_code
-        tests: [not_null]
-      - name: abr_match_confidence
         tests:
           - not_null
-
-  - name: dim_station
-    description: >
-      NSW station dimension, keyed on the source's real station code,
-      enriched with SIMULATED ABR business context (brand-level match,
-      not a live lookup — see abr_is_verified_via_live_api).
-    columns:
-      - name: station_key
-        tests: [unique, not_null]
-      - name: station_code
-        tests: [not_null]
       - name: abr_match_confidence
         tests:
           - not_null

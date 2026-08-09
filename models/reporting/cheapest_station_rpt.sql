@@ -1,8 +1,10 @@
-/*
-  "Where's the cheapest fuel right now" — the single query a business
-  user is most likely to actually ask for. One row per fuel type,
-  showing the lowest current price and which station has it.
-*/
+{{ 
+    config(
+        materialized='table'
+) }}
+
+-- Returns the cheapest station for each fuel type on the latest available date.
+
 with latest as (
     select max(price_date) as latest_date from {{ ref('fct_fuel_price') }}
 ),
@@ -13,8 +15,9 @@ ranked as (
         st.brand,
         st.address,
         f.price_per_litre_aud,
-        row_number() over (
-            partition by ft.fueltype_name order by f.price_per_litre_aud asc
+        rank() over (
+            partition by ft.fueltype_name
+            order by f.price_per_litre_aud
         ) as price_rank
     from {{ ref('fct_fuel_price') }} f
     join {{ ref('dim_fuel_type') }} ft on f.fueltype_key = ft.fueltype_key

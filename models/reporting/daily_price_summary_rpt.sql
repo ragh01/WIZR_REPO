@@ -1,8 +1,10 @@
-/*
-  Business-ready: average / lowest / highest price by day, fuel type,
-  and station brand. This is the primary "trend" output business users
-  will hit for reporting.
-*/
+{{ 
+    config(
+        materialized='table'
+) }}
+
+-- Daily average, minimum and maximum price by fuel type and brand.
+
 select
     d.price_date,
     d.year_month,
