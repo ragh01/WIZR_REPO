@@ -1,0 +1,13 @@
+fueltype_code,fueltype_name,product_category
+E10,Ethanol 10,Standard
+U91,Unleaded 91,Standard
+X91,Unleaded 91 (alt),Standard
+P95,Premium 95,Premium
+P98,Premium 98,Premium
+PDL,Premium Diesel,Diesel
+DL,Diesel,Diesel
+B20,Biodiesel 20,Diesel
+LPG,LPG,LPG
+CNG,Compressed Natural Gas,Gas
+EV,EV Charge,Electric
+E85,Ethanol 85,Standard

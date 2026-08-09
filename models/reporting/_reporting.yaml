@@ -1,0 +1,82 @@
+version: 2
+
+models:
+
+  - name: daily_price_summary_rpt
+    description: >
+      Daily fuel price summary by fuel type and station brand,
+      including station coverage and average, lowest and highest prices.
+
+    columns:
+      - name: price_date
+        tests:
+          - not_null
+
+      - name: fueltype_name
+        tests:
+          - not_null
+
+      - name: brand
+        tests:
+          - not_null
+
+      - name: avg_price
+        tests:
+          - not_null
+
+
+  - name: price_movement_rpt
+    description: >
+      Day-over-day movement in average fuel price by fuel type.
+
+    columns:
+      - name: price_date
+        tests:
+          - not_null
+
+      - name: fueltype_name
+        tests:
+          - not_null
+
+      - name: avg_price
+        tests:
+          - not_null
+
+
+  - name: station_coverage_rpt
+    description: >
+      Brand-level station and fuel-type coverage based on available
+      fuel price observations.
+
+    columns:
+      - name: brand
+        tests:
+          - not_null
+          - unique
+
+      - name: station_count
+        tests:
+          - not_null
+
+      - name: fuel_types_offered
+        tests:
+          - not_null
+
+
+  - name: cheapest_station_rpt
+    description: >
+      Cheapest available station by fuel type for the most recent
+      loaded price date. Tied stations are retained.
+
+    columns:
+      - name: fueltype_name
+        tests:
+          - not_null
+
+      - name: station_name
+        tests:
+          - not_null
+
+      - name: price_per_litre_aud
+        tests:
+          - not_null

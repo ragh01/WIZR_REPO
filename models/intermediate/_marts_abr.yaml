@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: station_abr_int
+    description: >
+      *** SIMULATED ABR enrichment *** — brand-level match against a
+      hand-authored reference (seed_brand_abr), not a live API call.
+      Matching approach, confidence rules, and limitations are documented
+      in the model SQL and the README.
+    columns:
+      - name: station_code
+        tests:
+          - not_null
+      - name: abr_match_confidence
+        tests:
+          - not_null

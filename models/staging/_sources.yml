@@ -1,0 +1,77 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: fuel_analytics
+    schema: bronze
+    description: >
+      Raw NSW FuelCheck data ingested from the NSW FuelCheck API.
+      The raw tables are populated by Python-based ingestion and loaded
+      into Snowflake without business transformations. These tables serve
+      as the source layer for downstream dbt staging and transformation models.
+
+    tables:
+      - name: nsw_stations_raw
+        description: >
+          Raw NSW FuelCheck station reference data sourced from the
+          FuelCheck /fuel/lovs endpoint. Contains station identifiers,
+          branding, names, addresses, and geographic coordinates.
+          The station code is the natural identifier for a fuel station.
+
+        columns:
+          - name: stationid
+            description: Unique identifier provided by the NSW FuelCheck source.
+
+          - name: code
+            description: >
+              Natural business key identifying the fuel station. Used to
+              join station reference data with fuel price records.
+
+          - name: brand
+            description: Fuel station brand.
+
+          - name: brandid
+            description: FuelCheck identifier for the station brand.
+
+          - name: name
+            description: Fuel station trading/display name.
+
+          - name: address
+            description: Street address of the fuel station.
+
+          - name: latitude
+            description: Latitude of the fuel station.
+
+          - name: longitude
+            description: Longitude of the fuel station.
+
+          - name: loaded_at
+            description: Timestamp when the raw record was loaded into Snowflake.
+
+      - name: nsw_prices_raw
+        description: >
+          Raw NSW FuelCheck intraday fuel price data sourced from the
+          FuelCheck /fuel/prices endpoint. Contains the current reported
+          price for each fuel type at each station.
+
+        columns:
+          - name: stationcode
+            description: >
+              Natural key identifying the fuel station. Joins to
+              nsw_stations_raw.code.
+
+          - name: fueltype
+            description: Fuel type for which the price is reported.
+
+          - name: price
+            description: >
+              Raw fuel price as received from the FuelCheck source.
+
+          - name: lastupdated
+            description: >
+              Timestamp provided by FuelCheck indicating when the fuel
+              price was last updated. Received as a string in
+              DD/MM/YYYY HH24:MI:SS format.
+
+          - name: loaded_at
+            description: Timestamp when the raw record was loaded into Snowflake.

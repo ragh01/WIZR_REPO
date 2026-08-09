@@ -1,0 +1,84 @@
+version: 2
+
+models:
+
+  - name: nsw_stations_stg
+    description: >
+      Staging model for NSW FuelCheck station reference data.
+      Applies basic data cleansing, column standardization, and data type
+      conversions to the raw station data. This model provides a clean
+      foundation for downstream Silver and Gold transformations.
+
+    columns:
+
+      - name: station_id
+        description: Unique identifier provided by the NSW FuelCheck source.
+
+      - name: station_code
+        description: >
+          Natural business key identifying the fuel station. Used to join
+          station information with fuel price records.
+
+        tests:
+          - not_null
+          - unique
+
+      - name: brand
+        description: Fuel station brand.
+
+      - name: brand_id
+        description: FuelCheck identifier for the station brand.
+
+      - name: station_name
+        description: Name of the fuel station.
+
+      - name: address
+        description: Street address of the fuel station.
+
+      - name: latitude
+        description: Latitude coordinate of the fuel station.
+
+      - name: longitude
+        description: Longitude coordinate of the fuel station.
+
+      - name: loaded_at
+        description: Timestamp when the raw record was loaded into Snowflake.
+
+
+  - name: nsw_prices_stg
+    description: >
+      Staging model for NSW FuelCheck intraday fuel price data.
+      Applies basic cleansing, column standardization, and data type
+      conversions to the raw price feed. The model retains price in
+      cents per litre and converts the source timestamp into a Snowflake
+      timestamp for downstream transformations.
+
+    columns:
+
+      - name: station_code
+        description: >
+          Natural key identifying the fuel station. Joins to
+          stg_nsw_stations.station_code.
+        tests:
+          - not_null
+
+      - name: fuel_type
+        description: Fuel type for which the price is reported.
+        tests:
+          - not_null
+
+      - name: price
+        description: >
+          Fuel price in source.
+        tests:
+          - not_null
+
+      - name: last_updated
+        description: >
+          Timestamp indicating when the fuel price was last updated by
+          NSW FuelCheck.
+        tests:
+          - not_null
+
+      - name: loaded_at
+        description: Timestamp when the raw record was loaded into Snowflake.
