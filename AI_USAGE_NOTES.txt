@@ -1,0 +1,111 @@
+# AI_USAGE_NOTES
+
+AI assistance was used selectively for development support, design discussion,
+debugging, and documentation. The final implementation was reviewed, tested,
+and validated by me.
+
+
+Tools used: ChatGPT and Claude (Anthropic)
+
+1. seed_brand_abr.csv
+
+---
+
+I authored the ABR enrichment seed as a hand-maintained CSV mapping fuel
+brands to placeholder ABNs, entity names, and confidence tiers.
+
+No live ABR Lookup GUID/API was available within the assessment timebox.
+The ABN values were based on general background knowledge and were NOT
+verified against the ABR register. They may therefore be inaccurate.
+
+The seed explicitly includes:
+is_verified_via_live_abr_api = FALSE
+
+This makes the enrichment limitation visible in the data itself.
+
+2. nsw_fuel_extract.py
+
+---
+
+The Python extractor was created with AI assistance and includes OAuth2
+client-credentials authentication, required API headers, calls to the six
+NSW Fuel API endpoints, and output handling.
+
+I ran the extractor myself using the real API credentials and used the
+resulting stations.csv and prices.csv to build the dbt staging models.
+
+The engineering decisions around the extracted data — including identifying
+station code as the business key and recognising lastupdated as an intraday
+timestamp — were reviewed and determined as part of my implementation.
+
+3. dbt modelling
+
+---
+
+AI assistance was used while designing and reviewing the dimensional model,
+including:
+
+* Defining the fact table grain as station x fuel type x day.
+* Structuring the fact and dimension tables.
+* Designing dim_station, dim_fuel_type, and dim_date.
+* Reviewing surrogate-key generation and fact-to-dimension relationships.
+* Discussing staging, intermediate, Gold/mart, and reporting layer
+  responsibilities.
+* Reviewing the SCD Type 2 station snapshot approach.
+* Suggesting business-focused reporting models such as daily price summary,
+  price movement, station coverage, and cheapest station reporting.
+
+The final model structure, SQL, assumptions, and implementation were reviewed
+and validated by me.
+
+4. dbt macros
+
+---
+
+AI assistance was also used while writing and reviewing reusable dbt macros,
+including:
+
+* cents_to_dollars
+* generate_surrogate_key
+* generate_schema_name
+
+The final macros were reviewed and tested as part of the project.
+
+5. Debugging and validation
+
+---
+
+AI assistance was used to help diagnose dbt and Snowflake errors during
+development, including SQL compilation errors and relationship-test failures.
+
+The fixes were applied and validated by running dbt builds and tests.
+For example, a station-key relationship failure led to investigation of
+station-code standardisation before surrogate-key generation.
+
+6. Documentation
+
+---
+
+AI assistance helped structure and improve the project README, including
+documentation of:
+
+* Project architecture
+* Data flow
+* Layer responsibilities
+* Fact grain
+* Modelling decisions
+* SCD2 approach
+* Reporting models
+* Testing
+* Materialisation choices
+* Assumptions and limitations
+* Production considerations
+
+AI assistance was also used to help prepare the pull request description
+and supporting project documentation.
+
+## Final responsibility
+
+AI assistance was used as a development and review aid. I made the final
+technical decisions, ran the code, validated the outputs, investigated
+failures, and am responsible for the submitted implementation.
