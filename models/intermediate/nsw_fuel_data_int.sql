@@ -13,7 +13,7 @@ with prices as (
 
 stations as (
     select *
-    from {{ ref('nsw_stations_stg') }}
+    from {{ ref('nsw_stations_int') }}
 ),
 
 joined as (

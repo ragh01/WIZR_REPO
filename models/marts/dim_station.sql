@@ -12,7 +12,7 @@ with stations as (
         address,
         latitude,
         longitude
-    from {{ ref('nsw_stations_stg') }}
+    from {{ ref('nsw_stations_int') }}
 ),
 
 abr as (
